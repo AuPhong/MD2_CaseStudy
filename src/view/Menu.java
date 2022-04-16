@@ -2,6 +2,6 @@ package view;
 
 public class Menu {
     public Menu() {
-        System.out.println("Hello");
+        System.out.println("Menu manager");
     }
 }
