@@ -87,11 +87,28 @@ public class Account {
 
     public void Login() {
         System.out.println("Enter login username: ");
-        String username = sc.nextLine();
+        String loginname;
         for (int i = 0; i < staffList.size(); i++) {
             while (true){
-                if ()
+                loginname = sc.nextLine();
+                if (loginname.equals(staffList.get(i).getUserName())){
+                    break;
+                }else {
+                    System.out.println("Wrong username, enter again: ");
+                }
             }
+
+            System.out.println("Enter password");
+            String password;
+            while (true){
+                password = sc.nextLine();
+                if (password.equals(staffList.get(i).getPassWord())){
+                    break;
+                }else {
+                    System.out.println("Wrong password, enter again: ");
+                }
+            }
+            new Menu();
         }
     }
 }
