@@ -1,13 +1,15 @@
 package model;
 
-public class Guest {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
     private String name;
     private int age;
     private String address;
     private String phonenumber;
     private String Email;
 
-    public Guest() {
+    public Customer() {
     }
 
     public String getName() {
@@ -50,7 +52,7 @@ public class Guest {
         Email = email;
     }
 
-    public Guest(String name, int age, String address, String phonenumber, String email) {
+    public Customer(String name, int age, String address, String phonenumber, String email) {
         this.name = name;
         this.age = age;
         this.address = address;

@@ -1,26 +1,27 @@
 package view;
 
+import config.ConfigLogin;
 import config.ConfigReadAndWrite;
-import model.Staff;
-import service.staffService.StaffServiceIPLM;
+import model.Role;
+import model.User;
+import service.staffService.UserServiceIPLM;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Account {
-    List<Staff> staffList = StaffServiceIPLM.staffList;
-    String PATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\staffData.txt";
+    List<User> userList = UserServiceIPLM.userList;
+    String PATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userData.txt";
     Scanner sc = new Scanner(System.in);
-
+    String LOGINPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt";
 
     public void Register() {
         int id;
-        if (staffList.size() == 0) {
+        if (userList.size() == 0) {
             id = 1;
         } else {
-            id = staffList.get(staffList.size() - 1).getId() + 1;
+            id = userList.get(userList.size() - 1).getId() + 1;
         }
         String emailRegex = "^[A-Za-z0-9]+[A-Za-z0-9]*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)$";
         String accountRegex = "^([a-z]|[0-9]){8,16}$";
@@ -78,9 +79,19 @@ public class Account {
             }
         }
 
-        Staff staff = new Staff(id, username, password, email, phonenumber);
-        staffList.add(staff);
-        new ConfigReadAndWrite<Staff>().writeFromFile(PATH, staffList);
+        System.out.println("Enter roll: admin or staff ");
+        String roleSelect = sc.nextLine();
+        Role role=null;
+        switch (roleSelect.toLowerCase()){
+            case "admin": role = Role.ADMIN;
+            break;
+            case "staff": role = Role.STAFF;
+            break;
+        }
+
+        User staff = new User(id, username, password, email, phonenumber,role);
+        userList.add(staff);
+        new ConfigReadAndWrite<User>().writeFromFile(PATH, userList);
         new Main();
     }
 
@@ -88,33 +99,33 @@ public class Account {
     public void Login() {
         System.out.println("Enter login username: ");
         String loginname = sc.nextLine();
-        for (int i = 0; i < staffList.size(); i++) {
-            if (loginname.equals(staffList.get(i).getUserName())) {
+        for (int i = 0; i < userList.size(); i++) {
+            if (loginname.equals(userList.get(i).getUserName())) {
                 System.out.println("Enter password");
                 String password;
                 while (true) {
                     password = sc.nextLine();
-                    if (password.equals(staffList.get(i).getPassWord())) {
+                    if (password.equals(userList.get(i).getPassWord())) {
                         break;
                     } else {
                         System.out.println("Wrong password, enter again: ");
                     }
                 }
-                new Menu();
+                User user = new UserServiceIPLM().findByUsername(loginname);
+                new ConfigLogin().writeFromFile(LOGINPATH, user);
+                if (user.getRole()==Role.ADMIN){
+                    new AdminMenu();
+                }else if (user.getRole()==Role.STAFF){
+                    new StaffMenu();
+                }
+
             }
         }
+    }
 
-
-//            while (true){
-//                loginname = sc.nextLine();
-//                if (loginname.equals(staffList.get(i).getUserName())){
-//                    break;
-//                }else {
-//                    System.out.println("Wrong username, enter again: ");
-//                }
-//            }
-
-
+    public void Logout(){
+        new ConfigLogin().writeFromFile(LOGINPATH,null);
+        new Main();
     }
 }
 

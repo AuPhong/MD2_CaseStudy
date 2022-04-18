@@ -5,9 +5,9 @@ import java.util.Date;
 
 public class Receipt implements Serializable {
     private int receiptId;
-    private Guest guest;
-    private Staff staff;
+    private Customer guest;
+    private User staff;
+    private Room room;
     private Date checkIn;
     private Date checkOut;
-
 }

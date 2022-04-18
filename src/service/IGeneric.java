@@ -7,5 +7,5 @@ public interface IGeneric<T> {
     void save(T t);
     void deleteById(int id);
     T findById(int id);
-    void editById(int id);
+    void editById(T t);
 }

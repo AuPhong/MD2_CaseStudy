@@ -1,5 +1,5 @@
 package model;
 
 public enum RoomStatus {
-    AVAILABLE, UNAVAILABLE, FIXING
+    AVAILABLE, UNAVAILABLE
 }
