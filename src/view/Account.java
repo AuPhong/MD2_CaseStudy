@@ -4,14 +4,14 @@ import config.ConfigLogin;
 import config.ConfigReadAndWrite;
 import model.Role;
 import model.User;
-import service.staffService.UserServiceIPLM;
+import service.staffService.UserServiceIMPL;
 
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Account {
-    List<User> userList = UserServiceIPLM.userList;
+    List<User> userList = UserServiceIMPL.userList;
     String PATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userData.txt";
     Scanner sc = new Scanner(System.in);
     String LOGINPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt";
@@ -91,7 +91,7 @@ public class Account {
 
         User staff = new User(id, username, password, email, phonenumber,role);
         userList.add(staff);
-        new ConfigReadAndWrite<User>().writeFromFile(PATH, userList);
+        new ConfigReadAndWrite<User>().writeToFile(PATH, userList);
         new Main();
     }
 
@@ -111,8 +111,8 @@ public class Account {
                         System.out.println("Wrong password, enter again: ");
                     }
                 }
-                User user = new UserServiceIPLM().findByUsername(loginname);
-                new ConfigLogin().writeFromFile(LOGINPATH, user);
+                User user = new UserServiceIMPL().findByUsername(loginname);
+                new ConfigLogin().writeToFile(LOGINPATH, user);
                 if (user.getRole()==Role.ADMIN){
                     new AdminMenu();
                 }else if (user.getRole()==Role.STAFF){
@@ -124,7 +124,7 @@ public class Account {
     }
 
     public void Logout(){
-        new ConfigLogin().writeFromFile(LOGINPATH,null);
+        new ConfigLogin().writeToFile(LOGINPATH,null);
         new Main();
     }
 }

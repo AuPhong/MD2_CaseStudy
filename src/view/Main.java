@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
     public Main() {
         String LOGINPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt";
-        new ConfigLogin().writeFromFile(LOGINPATH,null);
+        new ConfigLogin().writeToFile(LOGINPATH,null);
         System.out.println("=================HOTEL MANAGEMENT=================");
         Scanner sc = new Scanner(System.in);
         System.out.println("1. Register");

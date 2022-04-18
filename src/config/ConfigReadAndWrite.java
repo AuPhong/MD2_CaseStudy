@@ -24,7 +24,7 @@ public class ConfigReadAndWrite<T> {
         return tList;
     }
 
-    public void writeFromFile(String path, List<T> tList){
+    public void writeToFile(String path, List<T> tList){
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(path);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);

@@ -1,28 +1,26 @@
 package controller;
 
 import model.User;
-import service.staffService.UserServiceIPLM;
-
-import java.util.List;
+import service.staffService.UserServiceIMPL;
 
 public class UserController {
     public void showInfo(){
-        System.out.println(new UserServiceIPLM().showInfo());
+        System.out.println(new UserServiceIMPL().showInfo());
     }
 
     public void editInfo(User user){
-        new UserServiceIPLM().editInfo(user);
+        new UserServiceIMPL().editInfo(user);
     }
 
     public void showList(){
-        System.out.println(new UserServiceIPLM().findAll());
+        System.out.println(new UserServiceIMPL().findAll());
     }
 
     public void deleteById(int id){
-        new UserServiceIPLM().deleteById(id);
+        new UserServiceIMPL().deleteById(id);
     }
 
     public void editById(User user){
-        new UserServiceIPLM().editById(user);
+        new UserServiceIMPL().editById(user);
     }
 }

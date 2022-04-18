@@ -3,8 +3,6 @@ package config;
 import model.User;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConfigLogin {
     public User userLogin = new User();
@@ -26,7 +24,7 @@ public class ConfigLogin {
         return userLogin;
     }
 
-    public void writeFromFile(String path, User userLogin){
+    public void writeToFile(String path, User userLogin){
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(path);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);

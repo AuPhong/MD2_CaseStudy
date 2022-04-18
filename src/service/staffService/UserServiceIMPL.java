@@ -7,7 +7,7 @@ import model.User;
 
 import java.util.List;
 
-public class UserServiceIPLM implements IUserService {
+public class UserServiceIMPL implements IUserService {
     public static String PATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userData.txt";
     public static String LOGINPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt";
     public static ConfigLogin configLogin = new ConfigLogin();
@@ -16,7 +16,7 @@ public class UserServiceIPLM implements IUserService {
 
     @Override
     public List<User> findAll() {
-        configReadAndWrite.writeFromFile(PATH, userList);
+        configReadAndWrite.writeToFile(PATH, userList);
         return userList;
     }
 
@@ -113,7 +113,7 @@ public class UserServiceIPLM implements IUserService {
             role = user.getRole();
         }
         user = new User(id, username, password, email, phone, role);
-        configLogin.writeFromFile(LOGINPATH, user);
+        configLogin.writeToFile(LOGINPATH, user);
 
         for (int i = 0; i < userList.size(); i++) {
             if (userList.get(i).getId() == id) {

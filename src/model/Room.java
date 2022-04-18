@@ -68,6 +68,6 @@ public class Room implements Serializable {
                 ", roomStatus=" + roomStatus +
                 ", NumberOfBedroom=" + NumberOfBedroom +
                 ", NumberOfToilet=" + NumberOfToilet +
-                '}';
+                '}'+"\n";
     }
 }

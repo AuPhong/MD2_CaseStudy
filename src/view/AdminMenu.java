@@ -1,7 +1,5 @@
 package view;
 
-import service.staffService.UserServiceIPLM;
-
 import java.util.Scanner;
 
 public class AdminMenu {
