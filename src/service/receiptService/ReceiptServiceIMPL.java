@@ -3,7 +3,9 @@ package service.receiptService;
 import config.ConfigReadAndWrite;
 import model.Receipt;
 import model.Room;
+import model.RoomStatus;
 
+import java.util.Date;
 import java.util.List;
 
 public class ReceiptServiceIMPL implements IReceiptService {
@@ -24,7 +26,6 @@ public class ReceiptServiceIMPL implements IReceiptService {
     public void save(Receipt receipt) {
         receiptList.add(receipt);
         configReadAndWriteReceipt.writeToFile(RECEIPTPATH, receiptList);
-
     }
 
     @Override
@@ -45,5 +46,29 @@ public class ReceiptServiceIMPL implements IReceiptService {
     @Override
     public void editById(Receipt receipt) {
 
+    }
+
+    public void setRoomStt() {
+        int roomId = 0;
+        Date date = new Date();
+        for (int i = 0; i < receiptList.size(); i++) {
+            if (receiptList.get(i).getCheckOut().compareTo(date) >= 0 && receiptList.get(i).getCheckIn().compareTo(date)<=0) {
+                roomId = receiptList.get(i).getRoom().getRoomId();
+                for (int j = 0; j < roomList.size(); j++) {
+                    if (roomId == roomList.get(j).getRoomId()) {
+                        roomList.get(j).setRoomStatus(RoomStatus.UNAVAILABLE);
+                        configReadAndWriteRoom.writeToFile(ROOMPATH, roomList);
+                    }
+                }
+            } else {
+                roomId = receiptList.get(i).getRoom().getRoomId();
+                for (int j = 0; j < roomList.size(); j++) {
+                    if (roomId == roomList.get(j).getRoomId()) {
+                        roomList.get(j).setRoomStatus(RoomStatus.AVAILABLE);
+                        configReadAndWriteRoom.writeToFile(ROOMPATH, roomList);
+                    }
+                }
+            }
+        }
     }
 }

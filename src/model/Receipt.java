@@ -91,6 +91,6 @@ public class Receipt implements Serializable {
                 ", checkIn=" + checkIn +
                 ", checkOut=" + checkOut +
                 ", totalPrice=" + totalPrice +
-                '}';
+                '}'+"\n";
     }
 }

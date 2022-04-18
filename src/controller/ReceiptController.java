@@ -13,4 +13,8 @@ public class ReceiptController {
     public Receipt findById(int id){
         return new ReceiptServiceIMPL().findById(id);
     }
+
+    public void addReceipt(Receipt receipt){
+        new ReceiptServiceIMPL().save(receipt);
+    }
 }
