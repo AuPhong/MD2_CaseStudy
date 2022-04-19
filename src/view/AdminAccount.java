@@ -5,11 +5,12 @@ import controller.UserController;
 import model.Role;
 import model.User;
 
+import java.text.ParseException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class AdminAccount {
-    public AdminAccount() {
+    public AdminAccount() throws ParseException {
         Scanner sc = new Scanner(System.in);
         System.out.println("1. Show your info");
         System.out.println("2. Edit your info");

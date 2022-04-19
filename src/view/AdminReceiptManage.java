@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class AdminReceiptManage {
-    public AdminReceiptManage() {
+    public AdminReceiptManage() throws ParseException {
         String emailRegex = "^[A-Za-z0-9]+[A-Za-z0-9]*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)$";
         String phonenumberRegex = "^0[0-9]{8,9}$";
 
@@ -38,6 +38,7 @@ public class AdminReceiptManage {
         System.out.println("7. Comeback menu");
         System.out.println("8. Logout");
         int choose = sc.nextInt();
+        sc.nextLine();
         switch (choose) {
             case 1:
                 ArrayList<Room> arrayList = new ArrayList<>();
@@ -46,7 +47,7 @@ public class AdminReceiptManage {
                 } else {
                     System.out.println(new ReceiptController().showList());
                 }
-                new AdminRoomManage();
+                new AdminReceiptManage();
             case 2:
                 int id = 0;
                 if (receiptList.size() == 0) {
@@ -54,10 +55,9 @@ public class AdminReceiptManage {
                 } else {
                     id = receiptList.get(receiptList.size() - 1).getReceiptId() + 1;
                 }
-                System.out.println("Enter customer information: ");
+                System.out.println("Enter customer information. ");
                 System.out.println("Enter customer's name: ");
                 String name = sc.nextLine();
-                System.out.println();
                 System.out.println("Enter customer's age: ");
                 int age = sc.nextInt();
                 sc.nextLine();
@@ -80,16 +80,18 @@ public class AdminReceiptManage {
                     if (Pattern.matches(emailRegex, email)) {
                         break;
                     } else {
-                        System.out.println("Wrong email pattern, enter again: ");
+                        System.err.println("Wrong email pattern, enter again: ");
                     }
                 }
                 Customer customer = new Customer(name, age, address, phonenumber, email);
                 User staff = new ConfigLogin().readFromFile("C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt");
                 System.out.println("Choose from available room: ");
                 List<Room> availableRooms = new RoomServiceIMPL().findAvailableRoom();
+                System.out.println(availableRooms);
                 System.out.println("Enter room's id:");
                 Room room = null;
                 int roomId = sc.nextInt();
+                sc.nextLine();
                 for (int i = 0; i < availableRooms.size(); i++) {
                     if (roomId == availableRooms.get(i).getRoomId()) {
                         room = availableRooms.get(i);
@@ -99,17 +101,16 @@ public class AdminReceiptManage {
                 String dateIn = sc.nextLine();
                 System.out.println("Enter checkout date (dd MM yy): ");
                 String dateOut = sc.nextLine();
-                try {
-                    Date checkIn = myFormat.parse(dateIn);
-                    Date checkOut = myFormat.parse(dateOut);
-                    long diff = checkOut.getTime() - checkIn.getTime();
-                    long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                } catch (ParseException e) {
-                    System.err.println("Wrong date pattern!");
-                    new AdminReceiptManage();
-                }
 
-
+                Date checkIn = myFormat.parse(dateIn);
+                Date checkOut = myFormat.parse(dateOut);
+                long diff = checkOut.getTime() - checkIn.getTime();
+                long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                double totalPrice = days * room.getPrice();
+                Receipt receipt = new Receipt(id,customer,staff,room,checkIn,checkOut,totalPrice);
+                new ReceiptController().addReceipt(receipt);
+                new ReceiptController().setRoomStt();
+                new AdminReceiptManage();
             case 7:
                 new AdminMenu();
                 break;

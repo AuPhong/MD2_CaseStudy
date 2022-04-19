@@ -7,6 +7,7 @@ import model.Room;
 import model.RoomStatus;
 import service.roomService.RoomServiceIMPL;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class AdminRoomManage {
     public static String ROOMPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\roomData.txt";
     public static List<Room> roomList = new ConfigReadAndWrite<Room>().readFromFile(ROOMPATH);
 
-    public AdminRoomManage() {
+    public AdminRoomManage() throws ParseException {
         Scanner sc = new Scanner(System.in);
         System.out.println("1. Show roomlist");
         System.out.println("2. Add room");
@@ -59,8 +60,8 @@ public class AdminRoomManage {
                 } else {
                     RoomStatus roomStatus1 = new RoomServiceIMPL().findById(editId).getRoomStatus();
                     System.out.println("Enter editing price: ");
-                    double editPrice = sc.nextDouble();
-                    sc.nextLine();
+                    double editPrice = Double.parseDouble(sc.nextLine());
+//                    sc.nextLine();
                     System.out.println("Enter number of bedrooms to edit: ");
                     int editNumBed = sc.nextInt();
                     sc.nextLine();

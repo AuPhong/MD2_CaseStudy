@@ -1,9 +1,10 @@
 package view;
 
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class AdminMenu {
-    public AdminMenu() {
+    public AdminMenu() throws ParseException {
         Scanner sc = new Scanner(System.in);
         System.out.println("====================Admin menu====================");
         System.out.println("1. Account");

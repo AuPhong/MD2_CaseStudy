@@ -46,7 +46,7 @@ public class RoomServiceIMPL implements IRoomService {
     public void editById(Room room) {
         for (int i = 0; i < roomList.size(); i++) {
             if (room.getRoomId()==roomList.get(i).getRoomId()){
-                if (room.getPrice()==-1){
+                if (room.getPrice()== -1){
                 }else {
                     roomList.get(i).setPrice(room.getPrice());
                 }

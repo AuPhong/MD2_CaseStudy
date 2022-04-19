@@ -2,10 +2,11 @@ package view;
 
 import config.ConfigLogin;
 
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class Main {
-    public Main() {
+    public Main() throws ParseException {
         String LOGINPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt";
         new ConfigLogin().writeToFile(LOGINPATH,null);
         System.out.println("=================HOTEL MANAGEMENT=================");
@@ -23,7 +24,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         new Main();
     }
 }

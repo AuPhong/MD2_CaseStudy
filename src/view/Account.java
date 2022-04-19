@@ -6,6 +6,7 @@ import model.Role;
 import model.User;
 import service.staffService.UserServiceIMPL;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -16,7 +17,7 @@ public class Account {
     Scanner sc = new Scanner(System.in);
     String LOGINPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt";
 
-    public void Register() {
+    public void Register() throws ParseException {
         int id;
         if (userList.size() == 0) {
             id = 1;
@@ -96,7 +97,7 @@ public class Account {
     }
 
 
-    public void Login() {
+    public void Login() throws ParseException {
         System.out.println("Enter login username: ");
         String loginname = sc.nextLine();
         for (int i = 0; i < userList.size(); i++) {
@@ -123,7 +124,7 @@ public class Account {
         }
     }
 
-    public void Logout(){
+    public void Logout() throws ParseException {
         new ConfigLogin().writeToFile(LOGINPATH,null);
         new Main();
     }

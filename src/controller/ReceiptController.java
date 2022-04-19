@@ -17,4 +17,8 @@ public class ReceiptController {
     public void addReceipt(Receipt receipt){
         new ReceiptServiceIMPL().save(receipt);
     }
+
+    public void setRoomStt(){
+        new ReceiptServiceIMPL().setRoomStt();
+    }
 }
