@@ -1,11 +1,16 @@
 package view;
 
 import config.ConfigLogin;
+import service.receiptService.ReceiptServiceIMPL;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
+
+
+
     public Main() throws ParseException {
         String LOGINPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt";
         new ConfigLogin().writeToFile(LOGINPATH,null);
@@ -14,6 +19,7 @@ public class Main {
         System.out.println("1. Register");
         System.out.println("2. Login");
         System.out.println("3. Logout");
+        System.out.println("==================================================");
         int choose = sc.nextInt();
         switch (choose){
             case 1: new Account().Register();
@@ -25,6 +31,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws ParseException {
+        new ReceiptServiceIMPL().setRoomStt();
         new Main();
     }
 }

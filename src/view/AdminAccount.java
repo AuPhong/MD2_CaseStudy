@@ -10,15 +10,27 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class AdminAccount {
+    public void backToMenu() throws ParseException {
+        System.err.println("Press any key to come back!");
+        Scanner sc = new Scanner(System.in);
+        String choose = sc.nextLine();
+        switch (choose) {
+            default:
+                new AdminAccount();
+        }
+    }
     public AdminAccount() throws ParseException {
         Scanner sc = new Scanner(System.in);
+        System.out.println("===============Account manage===============");
         System.out.println("1. Show your info");
         System.out.println("2. Edit your info");
         System.out.println("3. Show user list");
         System.out.println("4. Edit user list");
         System.out.println("5. Delete user");
-        System.out.println("6. Comeback menu");
-        System.out.println("7. Logout");
+        System.out.println("0. Comeback menu");
+        System.out.println("============================================");
+
+        //System.out.println("7. Logout");
         int choose = sc.nextInt();
         sc.nextLine();
         String emailRegex = "^[A-Za-z0-9]+[A-Za-z0-9]*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)$";
@@ -28,7 +40,7 @@ public class AdminAccount {
         switch (choose) {
             case 1:
                 new UserController().showInfo();
-                new AdminAccount();
+                backToMenu();
             case 2:
                 int id = new ConfigLogin().readFromFile("C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt").getId();
                 System.out.println("Enter username to change:");
@@ -100,10 +112,10 @@ public class AdminAccount {
                 User user = new User(id, username, password, email, phonenumber, role);
                 new UserController().editInfo(user);
                 new UserController().showInfo();
-                new AdminAccount();
+                backToMenu();
             case 3:
                 new UserController().showList();
-                new AdminAccount();
+                backToMenu();
             case 4:
                 System.out.println("Enter user's id to edit: ");
                 int editId = sc.nextInt();
@@ -175,13 +187,13 @@ public class AdminAccount {
                 }
                 User user1 = new User(editId, name, pass, mail, phone, role1);
                 new UserController().editById(user1);
-                new AdminAccount();
+                backToMenu();
             case 5:
                 System.out.println("Enter id to delete: ");
                 int deleteId = sc.nextInt();
                 new UserController().deleteById(deleteId);
-                new AdminAccount();
-            case 6:
+                backToMenu();
+            case 0:
                 new AdminMenu();
                 break;
             case 7:

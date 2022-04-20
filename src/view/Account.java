@@ -2,6 +2,7 @@ package view;
 
 import config.ConfigLogin;
 import config.ConfigReadAndWrite;
+import controller.ReceiptController;
 import model.Role;
 import model.User;
 import service.staffService.UserServiceIMPL;
@@ -12,10 +13,24 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Account {
-    List<User> userList = UserServiceIMPL.userList;
+    List<User> userList = new UserServiceIMPL().userList;
     String PATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userData.txt";
     Scanner sc = new Scanner(System.in);
     String LOGINPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt";
+
+//    static {
+//        new ReceiptController().setRoomStt();
+//    }
+
+    public boolean checkUsername(String username) {
+        boolean check = true;
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUserName().equals(username)) {
+                check = false;
+                return check;
+            }
+        } return check;
+    }
 
     public void Register() throws ParseException {
         int id;
@@ -34,11 +49,12 @@ public class Account {
         boolean checkUsernameRegex;
         while (true) {
             username = sc.nextLine();
+            boolean check = checkUsername(username);
             checkUsernameRegex = Pattern.matches(accountRegex, username);
-            if (checkUsernameRegex) {
+            if (checkUsernameRegex && check) {
                 break;
             } else {
-                System.err.println("Wrong account pattern, enter again: ");
+                System.err.println("This user name is existed or wrong account pattern, enter again: ");
             }
         }
 
@@ -80,17 +96,16 @@ public class Account {
             }
         }
 
-        System.out.println("Enter roll: admin or staff ");
-        String roleSelect = sc.nextLine();
-        Role role=null;
-        switch (roleSelect.toLowerCase()){
-            case "admin": role = Role.ADMIN;
-            break;
-            case "staff": role = Role.STAFF;
-            break;
+        //System.out.println("Enter roll: admin or staff ");
+        //String roleSelect = sc.nextLine();
+        Role role = null;
+        if (id == 1) {
+            role = Role.ADMIN;
+        } else {
+            role = Role.STAFF;
         }
 
-        User staff = new User(id, username, password, email, phonenumber,role);
+        User staff = new User(id, username, password, email, phonenumber, role);
         userList.add(staff);
         new ConfigReadAndWrite<User>().writeToFile(PATH, userList);
         new Main();
@@ -114,9 +129,9 @@ public class Account {
                 }
                 User user = new UserServiceIMPL().findByUsername(loginname);
                 new ConfigLogin().writeToFile(LOGINPATH, user);
-                if (user.getRole()==Role.ADMIN){
+                if (user.getRole() == Role.ADMIN) {
                     new AdminMenu();
-                }else if (user.getRole()==Role.STAFF){
+                } else if (user.getRole() == Role.STAFF) {
                     new StaffMenu();
                 }
 
@@ -125,7 +140,7 @@ public class Account {
     }
 
     public void Logout() throws ParseException {
-        new ConfigLogin().writeToFile(LOGINPATH,null);
+        new ConfigLogin().writeToFile(LOGINPATH, null);
         new Main();
     }
 }

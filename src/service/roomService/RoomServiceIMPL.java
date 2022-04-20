@@ -1,10 +1,12 @@
 package service.roomService;
 
 import config.ConfigReadAndWrite;
+import controller.ReceiptController;
 import model.Room;
 import model.RoomStatus;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RoomServiceIMPL implements IRoomService {
@@ -13,6 +15,7 @@ public class RoomServiceIMPL implements IRoomService {
 
     @Override
     public List<Room> findAll() {
+        new ReceiptController().setRoomStt();
         new ConfigReadAndWrite<Room>().writeToFile(ROOMPATH, roomList);
         return roomList;
     }
@@ -72,6 +75,7 @@ public class RoomServiceIMPL implements IRoomService {
     }
 
     public List<Room> findByRange(double min, double max){
+        new ReceiptController().setRoomStt();
         List<Room> rooms = new ArrayList<>();
         for (int i = 0; i < roomList.size(); i++) {
             if (roomList.get(i).getPrice()>=min && roomList.get(i).getPrice()<=max){

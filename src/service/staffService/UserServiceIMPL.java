@@ -36,6 +36,11 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public User findById(int id) {
+        for (int i = 0; i < userList.size(); i++) {
+            if (id == userList.get(i).getId()){
+                return userList.get(i);
+            }
+        }
         return null;
     }
 
@@ -71,7 +76,7 @@ public class UserServiceIMPL implements IUserService {
                 }
             }
         }
-
+        configReadAndWrite.writeToFile(PATH, userList);
     }
 
     public User findByUsername(String username) {

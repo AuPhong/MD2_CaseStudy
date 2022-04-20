@@ -1,6 +1,7 @@
 package view;
 
 import config.ConfigReadAndWrite;
+import controller.ReceiptController;
 import controller.RoomController;
 import jdk.internal.dynalink.linker.LinkerServices;
 import model.Room;
@@ -14,9 +15,19 @@ import java.util.Scanner;
 public class AdminRoomManage {
     public static String ROOMPATH = "C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\roomData.txt";
     public static List<Room> roomList = new ConfigReadAndWrite<Room>().readFromFile(ROOMPATH);
+    public void backToMenu() throws ParseException {
+        System.err.println("Press any key to come back!");
+        Scanner sc = new Scanner(System.in);
+        String choose = sc.nextLine();
+        switch (choose) {
+            default:
+                new AdminRoomManage();
+        }
+    }
 
     public AdminRoomManage() throws ParseException {
         Scanner sc = new Scanner(System.in);
+        System.out.println("================Room manage================");
         System.out.println("1. Show roomlist");
         System.out.println("2. Add room");
         System.out.println("3. Edit room");
@@ -24,12 +35,14 @@ public class AdminRoomManage {
         System.out.println("5. Find room by price range");
         System.out.println("6. Find room by Id");
         System.out.println("7. Delete room");
-        System.out.println("8. Come back to menu");
+        System.out.println("0. Come back to menu");
+        System.out.println("===========================================");
+
         int choose = sc.nextInt();
         switch (choose) {
             case 1:
                 new RoomController().showList();
-                new AdminRoomManage();
+                backToMenu();
             case 2:
                 int id = 1;
                 if (roomList.size() == 0) {
@@ -49,7 +62,7 @@ public class AdminRoomManage {
                 sc.nextLine();
                 Room room = new Room(id, price, roomStatus, numBedroom, numToilet);
                 new RoomController().addRoom(room);
-                new AdminRoomManage();
+                backToMenu();
             case 3:
                 System.out.println("Enter room's id to edit");
                 int editId = sc.nextInt();
@@ -70,11 +83,11 @@ public class AdminRoomManage {
                     sc.nextLine();
                     Room room1 = new Room(editId, editPrice, roomStatus1, editNumBed, editNumToil);
                     new RoomController().editById(room1);
-                    new AdminRoomManage();
+                    backToMenu();
                 }
             case 4:
                 new RoomController().findAvailableRoom();
-                new AdminRoomManage();
+                backToMenu();
             case 5:
                 System.out.println("Enter min range: ");
                 double min = sc.nextDouble();
@@ -83,20 +96,20 @@ public class AdminRoomManage {
                 double max = sc.nextDouble();
                 sc.nextLine();
                 new RoomController().findByPrice(min, max);
-                new AdminRoomManage();
+                backToMenu();
             case 6:
                 System.out.println("Enter room's id to find: ");
                 int roomId = sc.nextInt();
                 sc.nextLine();
                 new RoomController().findRoomById(roomId);
-                new AdminRoomManage();
+                backToMenu();
             case 7:
                 System.out.println("Enter room's id to delete: ");
                 int deleteId = sc.nextInt();
                 sc.nextLine();
                 new RoomController().deleteRoom(deleteId);
-                new AdminRoomManage();
-            case 8:
+                backToMenu();
+            case 0:
                 new AdminMenu();
         }
     }
