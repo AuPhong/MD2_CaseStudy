@@ -211,7 +211,7 @@ public class AdminReceiptManage {
                                 } else {
                                     System.out.println("Enter room's id to change:");
                                     int roomIdChange = Integer.parseInt(sc.nextLine());
-                                    for (int i = 0; i < availRoomToChange.size(); i++) {
+                                    for (int i = 0; i < new RoomServiceIMPL().findAll().size(); i++) {
                                         if (roomIdChange == new RoomServiceIMPL().findAll().get(i).getRoomId()) {
                                             roomChange = new RoomServiceIMPL().findAll().get(i);
                                         }

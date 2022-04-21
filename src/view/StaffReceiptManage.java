@@ -7,7 +7,9 @@ import model.Customer;
 import model.Receipt;
 import model.Room;
 import model.User;
+import service.receiptService.ReceiptServiceIMPL;
 import service.roomService.RoomServiceIMPL;
+import service.staffService.UserServiceIMPL;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,9 +41,9 @@ public class StaffReceiptManage {
         String dateRegex = "\\d{2}\\s\\d{1,2}\\s\\d{4}";
         String ageRegex = "\\d{1,3}";
         System.out.println("==============Receipt manage==============");
-        System.out.println("1. Show receipt list");
+        System.out.println("1. Show your receipt list");
         System.out.println("2. Add receipt");
-        System.out.println("3. Edit receipt by ID");
+        System.out.println("3. Edit your receipt list");
         System.out.println("4. Find receipt by ID");
         System.out.println("0. Comeback menu");
         System.out.println("==========================================");
@@ -50,10 +52,17 @@ public class StaffReceiptManage {
         switch (choose) {
             case 1:
                 ArrayList<Room> arrayList = new ArrayList<>();
-                if (new ReceiptController().showList().equals(arrayList)) {
+                User loginUser = new ConfigLogin().readFromFile("C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt");
+                List<Receipt> receipts = new ArrayList<>();
+                if (receiptList.equals(arrayList)) {
                     System.err.println("There is no receipt data!");
                 } else {
-                    System.out.println(new ReceiptController().showList());
+                    for (int i = 0; i < receiptList.size(); i++) {
+                        if (receiptList.get(i).getStaff().getUserName().equals(loginUser.getUserName())){
+                            receipts.add(receiptList.get(i));
+                        }
+                    }
+                    System.out.println(receipts);
                 }
                 backToMenu();
             case 2:
@@ -148,5 +157,144 @@ public class StaffReceiptManage {
                     new ReceiptController().setRoomStt();
                     backToMenu();
                 }
+            case 3:
+                ArrayList<Room> arrayList1 = new ArrayList<>();
+                User loginUser1 = new ConfigLogin().readFromFile("C:\\Users\\Sang\\IntelliJ IDEA\\MD2_CaseStudy\\src\\data\\userLoginData.txt");
+                List<Receipt> receipts1 = new ArrayList<>();
+                if (receiptList.equals(arrayList1)) {
+                    System.err.println("There is no receipt data!");
+                } else {
+                    for (int i = 0; i < receiptList.size(); i++) {
+                        if (receiptList.get(i).getStaff().getUserName().equals(loginUser1.getUserName())){
+                            receipts1.add(receiptList.get(i));
+                        }
+                    }
+                    System.out.println(receipts1);
+                }
+                System.out.println("");
+                System.out.println("||||Enter receipt's id to edit:|||");
+                int chooseReceiptId = Integer.parseInt(sc.nextLine());
+                boolean check = false;
+                for (int i = 0; i < receipts1.size(); i++) {
+                    if (chooseReceiptId==receipts1.get(i).getReceiptId()){
+                        check = true;
+                        break;
+                    }
+                }
+                if (check){
+                    Receipt receiptChange = new ReceiptController().findById(chooseReceiptId);
+                    Customer customerChange = receiptChange.getCustomer();
+                    User staffChange = receiptChange.getStaff();
+                    Room roomChange = receiptChange.getRoom();
+                    Date checkInChange = receiptChange.getCheckIn();
+                    Date checkOutChange = receiptChange.getCheckOut();
+                    double totalPriceChange = receiptChange.getTotalPrice();
+                    while (true) {
+                        System.err.println("Press any key to continue edit, 0 to comeback!");
+                        String chooseNext = sc.nextLine();
+
+                        if (chooseNext.equals("0")) {
+                            new StaffReceiptManage();
+                        } else {
+                            System.out.print("1. Edit customer's information:\t\t");
+                            System.out.print("2. Edit room's information:\t\t");
+                            System.out.print("3. Edit checkin date:\t\t");
+                            System.out.print("4. Edit checkout date:\n");
+                            String chooseEdit = sc.nextLine();
+                            switch (chooseEdit) {
+                                case "1":
+                                    System.out.println("Enter customer's name: ");
+                                    String nameChange = sc.nextLine();
+                                    customerChange.setName(nameChange);
+                                    System.out.println("Enter customer's age: ");
+                                    String ageChange = sc.nextLine();
+                                    customerChange.setAge(ageChange);
+                                    System.out.println("Enter customer's address: ");
+                                    String addressChange = sc.nextLine();
+                                    customerChange.setAddress(addressChange);
+                                    System.out.println("Enter customer's phone: ");
+                                    String phoneChange = sc.nextLine();
+                                    customerChange.setPhonenumber(phoneChange);
+                                    System.out.println("Enter customer's email: ");
+                                    String emailChange = sc.nextLine();
+                                    customerChange.setAge(emailChange);
+                                    Receipt receipt = new Receipt(chooseReceiptId, customerChange, staffChange, roomChange, checkInChange, checkOutChange, totalPriceChange);
+                                    new ReceiptController().editById(receipt);
+                                    break;
+                                case "2":
+                                    List<Room> availRoomToChange = new RoomServiceIMPL().findAvailableRoom();
+                                    if (availRoomToChange.size() == 0) {
+                                        System.err.println("There is no room to change!");
+                                        break;
+                                    } else {
+                                        System.out.println("Enter room's id to change:");
+                                        int roomIdChange = Integer.parseInt(sc.nextLine());
+                                        for (int i = 0; i < new RoomServiceIMPL().findAll().size(); i++) {
+                                            if (roomIdChange == new RoomServiceIMPL().findAll().get(i).getRoomId()) {
+                                                roomChange = new RoomServiceIMPL().findAll().get(i);
+                                            }
+                                        }
+                                    }
+                                    receiptChange.setRoom(roomChange);
+                                    Date checkIn1 = receiptChange.getCheckIn();
+                                    Date checkOut1 = receiptChange.getCheckOut();
+                                    long diff = checkOut1.getTime() - checkIn1.getTime();
+                                    long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                                    double totalPrice = days * roomChange.getPrice();
+                                    receiptChange.setTotalPrice(totalPrice);
+                                    new ReceiptController().editById(receiptChange);
+                                    break;
+
+                                case "3":
+                                    System.out.println("Enter new checkin date: ");
+                                    String checkInChange1 = "";
+                                    while (true) {
+                                        checkInChange1 = sc.nextLine();
+                                        if (Pattern.matches(dateRegex, checkInChange1)) {
+                                            break;
+                                        } else {
+                                            System.err.println("Wrong date pattern, enter again: ");
+                                        }
+                                    }
+                                    Date dateCheckIn = myFormat.parse(checkInChange1);
+                                    receiptChange.setCheckIn(dateCheckIn);
+                                    Date checkOut2 = receiptChange.getCheckOut();
+                                    long diff1 = checkOut2.getTime() - dateCheckIn.getTime();
+                                    long days1 = TimeUnit.DAYS.convert(diff1, TimeUnit.MILLISECONDS);
+                                    double totalPrice1 = days1 * roomChange.getPrice();
+                                    receiptChange.setTotalPrice(totalPrice1);
+                                    new ReceiptController().editById(receiptChange);
+                                    break;
+                                case "4":
+                                    System.out.println("Enter new checkout date: ");
+                                    String checkOutChange1 = "";
+                                    while (true) {
+                                        checkOutChange1 = sc.nextLine();
+                                        if (Pattern.matches(dateRegex, checkOutChange1)) {
+                                            break;
+                                        } else {
+                                            System.err.println("Wrong date pattern, enter again: ");
+                                        }
+                                    }
+                                    Date dateCheckOut = myFormat.parse(checkOutChange1);
+                                    receiptChange.setCheckOut(dateCheckOut);
+                                    Date checkIn = receiptChange.getCheckIn();
+                                    long diff2 = dateCheckOut.getTime() - checkIn.getTime();
+                                    long days2 = TimeUnit.DAYS.convert(diff2, TimeUnit.MILLISECONDS);
+                                    double totalPrice2 = days2 * roomChange.getPrice();
+                                    receiptChange.setTotalPrice(totalPrice2);
+                                    new ReceiptController().editById(receiptChange);
+                                    break;
+                            }
+                        }
+                    }
+                } else {
+                    System.err.println("You cannot edit this receipt!");
+                }
+                backToMenu();
+            case 0:
+                new StaffMenu();
+
         }
     }
+}
